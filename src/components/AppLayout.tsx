@@ -1,39 +1,30 @@
 
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import { Sidebar } from "./Sidebar";
-import { Button } from "@/components/ui/button";
+import { AppSidebar } from "./AppSidebar";
+import { useState } from "react";
+import { Button } from "./ui/button";
 import { Menu } from "lucide-react";
 
 export function AppLayout() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
+    <div className="min-h-screen flex">
+      <AppSidebar />
       
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <header className="flex h-14 items-center border-b bg-background px-4 lg:h-[60px]">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="mr-2 block lg:hidden"
+      <div className="flex-1 flex flex-col">
+        <header className="h-14 border-b px-4 lg:px-6 flex items-center lg:hidden">
+          <Button 
+            variant="ghost" 
+            size="icon" 
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >
             <Menu className="h-5 w-5" />
-            <span className="sr-only">Toggle sidebar</span>
+            <span className="sr-only">Toggle menu</span>
           </Button>
-          <div className="flex flex-1 items-center justify-between">
-            <div className="lg:hidden">
-              <h1 className="text-lg font-semibold">Student Task Organizer</h1>
-            </div>
-            <div className="flex items-center gap-2">
-              {/* Profile or other header actions could go here */}
-            </div>
-          </div>
         </header>
         
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">
+        <main className="flex-1 p-4 lg:p-6">
           <Outlet />
         </main>
       </div>

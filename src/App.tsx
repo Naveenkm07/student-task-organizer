@@ -10,7 +10,7 @@ import LoginPage from "./pages/Auth/LoginPage";
 import RegisterPage from "./pages/Auth/RegisterPage";
 import DashboardPage from "./pages/Dashboard/DashboardPage";
 import CalendarPage from "./pages/Calendar/CalendarPage";
-import ExportsPage from "./pages/Exports/ExportsPage";
+import TimetablePage from "./pages/Timetable/TimetablePage";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import NotFound from "./pages/NotFound";
 import React from 'react';
@@ -36,7 +36,7 @@ const App: React.FC = () => {
                 <Route element={<AppLayout />}>
                   <Route path="/dashboard" element={<DashboardPage />} />
                   <Route path="/calendar" element={<CalendarPage />} />
-                  <Route path="/exports" element={<ExportsPage />} />
+                  <Route path="/timetable" element={<TimetablePage />} />
                   <Route path="/profile" element={<ProfilePage />} />
                 </Route>
                 
