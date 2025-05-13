@@ -21,8 +21,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { toast } from "@/hooks/use-toast";
 import TaskForm from "@/components/TaskForm";
 import TaskItem from "@/components/TaskItem";
+import { TaskMiniCard } from "@/components/TaskMiniCard";
+import { getTaskIcon } from "@/lib/task-utils";
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 
 export default function CalendarPage() {
   const today = startOfToday();
@@ -30,6 +36,17 @@ export default function CalendarPage() {
   const [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));
   const [tasks, setTasks] = useState<Task[]>(mockTasks);
   const [isAddTaskDialogOpen, setIsAddTaskDialogOpen] = useState(false);
+  const [hoveredDay, setHoveredDay] = useState<Date | null>(null);
+  const [calendarView, setCalendarView] = useState<"month" | "week">("month");
+  
+  // Set up DnD sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // Minimum distance required to start drag
+      },
+    })
+  );
   
   const firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
   
@@ -55,16 +72,28 @@ export default function CalendarPage() {
   const addTask = (task: Task) => {
     setTasks((prevTasks) => [task, ...prevTasks]);
     setIsAddTaskDialogOpen(false);
+    toast({
+      title: "Task created",
+      description: "Your task has been created successfully",
+    });
   };
 
   const updateTask = (updatedTask: Task) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
     );
+    toast({
+      title: "Task updated",
+      description: "Your task has been updated successfully",
+    });
   };
 
   const deleteTask = (taskId: string) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+    toast({
+      title: "Task deleted",
+      description: "Your task has been deleted successfully",
+    });
   };
 
   const toggleCompleted = (taskId: string) => {
@@ -77,6 +106,28 @@ export default function CalendarPage() {
   
   const getTasksForDay = (day: Date) => {
     return tasks.filter((task) => isSameDay(parseISO(task.deadline.toString()), day));
+  };
+  
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    
+    if (over && active.id !== over.id) {
+      const taskId = active.id;
+      const newDate = new Date(over.id);
+      
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === taskId
+            ? { ...task, deadline: newDate, updatedAt: new Date() }
+            : task
+        )
+      );
+      
+      toast({
+        title: "Task rescheduled",
+        description: `Task moved to ${format(newDate, "MMMM d, yyyy")}`,
+      });
+    }
   };
   
   return (
@@ -125,74 +176,131 @@ export default function CalendarPage() {
               >
                 Next
               </Button>
+              <div className="border-l h-8 mx-2"></div>
+              <div className="flex border rounded-md overflow-hidden">
+                <Button
+                  variant={calendarView === "month" ? "secondary" : "ghost"}
+                  size="sm"
+                  onClick={() => setCalendarView("month")}
+                  className="rounded-none"
+                >
+                  Month
+                </Button>
+                <Button
+                  variant={calendarView === "week" ? "secondary" : "ghost"}
+                  size="sm"
+                  onClick={() => setCalendarView("week")}
+                  className="rounded-none"
+                >
+                  Week
+                </Button>
+              </div>
             </div>
           </div>
         </div>
         
         {/* Calendar Grid */}
-        <div className="col-span-5 md:col-span-7 grid grid-cols-7 gap-2 mt-4">
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-            <div key={day} className="text-center font-medium text-sm py-2">
-              {day}
-            </div>
-          ))}
-          
-          {/* Empty cells for days of the week before the first day of the month */}
-          {Array.from({ length: getDay(firstDayCurrentMonth) }).map((_, index) => (
-            <div
-              key={`empty-${index}`}
-              className="bg-secondary/50 rounded-2xl p-2 h-24 md:h-28"
-            />
-          ))}
-          
-          {/* Calendar days */}
-          {days.map((day) => {
-            const dayTasks = getTasksForDay(day);
-            const hasUrgentTask = dayTasks.some(task => task.priority === "urgent" && !task.completed);
-            const hasHighTask = dayTasks.some(task => task.priority === "high" && !task.completed);
+        <DndContext 
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          modifiers={[restrictToWindowEdges]}
+          onDragEnd={handleDragEnd}
+        >
+          <div className="col-span-5 md:col-span-7 grid grid-cols-7 gap-2 mt-4">
+            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+              <div key={day} className="text-center font-medium text-sm py-2">
+                {day}
+              </div>
+            ))}
             
-            return (
-              <Button
-                key={day.toString()}
-                variant="outline"
-                className={cn(
-                  "h-24 md:h-28 flex flex-col gap-1 p-2 hover:bg-accent rounded-2xl",
-                  isEqual(day, selectedDay) && "bg-primary/10 border-primary",
-                  isToday(day) && "border-2 border-primary",
-                  !isSameMonth(day, firstDayCurrentMonth) && "text-muted-foreground bg-secondary/30"
-                )}
-                onClick={() => setSelectedDay(day)}
-              >
-                <time
-                  dateTime={format(day, "yyyy-MM-dd")}
-                  className={cn(
-                    "ml-auto font-semibold",
-                    isToday(day) && "bg-primary text-primary-foreground rounded-full h-6 w-6 flex items-center justify-center"
-                  )}
-                >
-                  {format(day, "d")}
-                </time>
-                <div className="w-full flex flex-col gap-1 mt-auto items-start">
-                  {dayTasks.length > 0 && (
-                    <div className="flex gap-1 flex-wrap">
-                      {hasUrgentTask && (
-                        <div className="w-2 h-2 rounded-full bg-priority-urgent"></div>
+            {/* Empty cells for days of the week before the first day of the month */}
+            {Array.from({ length: getDay(firstDayCurrentMonth) }).map((_, index) => (
+              <div
+                key={`empty-${index}`}
+                className="bg-secondary/50 rounded-2xl p-2 h-24 md:h-28"
+              />
+            ))}
+            
+            {/* Calendar days */}
+            {days.map((day) => {
+              const dayTasks = getTasksForDay(day);
+              const hasUrgentTask = dayTasks.some(task => task.priority === "urgent" && !task.completed);
+              const hasHighTask = dayTasks.some(task => task.priority === "high" && !task.completed);
+              const isHovered = hoveredDay && isSameDay(day, hoveredDay);
+              
+              return (
+                <Popover key={day.toString()} open={isHovered} onOpenChange={() => {}}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      id={day.toISOString()}
+                      variant="outline"
+                      className={cn(
+                        "h-24 md:h-28 flex flex-col gap-1 p-2 hover:bg-accent rounded-2xl",
+                        isEqual(day, selectedDay) && "bg-primary/10 border-primary",
+                        isToday(day) && "border-2 border-primary",
+                        !isSameMonth(day, firstDayCurrentMonth) && "text-muted-foreground bg-secondary/30"
                       )}
-                      {hasHighTask && (
-                        <div className="w-2 h-2 rounded-full bg-priority-high"></div>
-                      )}
-                      {dayTasks.length > 0 && (
-                        <span className="text-xs font-medium">
-                          {dayTasks.length} {dayTasks.length === 1 ? "task" : "tasks"}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </Button>
-            );
-          })}
-        </div>
+                      onClick={() => setSelectedDay(day)}
+                      onMouseEnter={() => setHoveredDay(day)}
+                      onMouseLeave={() => setHoveredDay(null)}
+                    >
+                      <time
+                        dateTime={format(day, "yyyy-MM-dd")}
+                        className={cn(
+                          "ml-auto font-semibold",
+                          isToday(day) && "bg-primary text-primary-foreground rounded-full h-6 w-6 flex items-center justify-center"
+                        )}
+                      >
+                        {format(day, "d")}
+                      </time>
+                      <div className="w-full flex flex-col gap-1 mt-auto items-start">
+                        {dayTasks.length > 0 && (
+                          <div className="flex gap-1 flex-wrap items-center">
+                            {hasUrgentTask && (
+                              <div className="w-2 h-2 rounded-full bg-priority-urgent"></div>
+                            )}
+                            {hasHighTask && (
+                              <div className="w-2 h-2 rounded-full bg-priority-high"></div>
+                            )}
+                            
+                            {/* Display task icons */}
+                            <div className="flex gap-1 overflow-hidden">
+                              {dayTasks.slice(0, 3).map((task) => {
+                                const Icon = getTaskIcon(task.title);
+                                return (
+                                  <Icon key={task.id} className="h-3.5 w-3.5 text-muted-foreground" data-task-id={task.id} />
+                                );
+                              })}
+                              {dayTasks.length > 3 && (
+                                <span className="text-xs font-medium">+{dayTasks.length - 3}</span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </Button>
+                  </PopoverTrigger>
+                  
+                  <PopoverContent align="center" sideOffset={5} className="w-auto p-0 border-none shadow-lg">
+                    {dayTasks.length > 0 ? (
+                      <div className="flex flex-col gap-2 p-2 max-h-64 overflow-y-auto">
+                        {dayTasks.map((task) => (
+                          <TaskMiniCard key={task.id} task={task} />
+                        ))}
+                      </div>
+                    ) : (
+                      <Card className="w-64">
+                        <CardContent className="p-3 text-center">
+                          <p className="text-sm text-muted-foreground">No tasks for this day</p>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </PopoverContent>
+                </Popover>
+              );
+            })}
+          </div>
+        </DndContext>
         
         {/* Selected Day Tasks */}
         <div className="col-span-5 md:col-span-7 mt-4">
