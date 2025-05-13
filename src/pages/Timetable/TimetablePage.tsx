@@ -11,6 +11,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TaskTimetable } from "@/components/TaskTimetable";
+import { mockTasks } from "@/lib/mock-data";
 
 export default function TimetablePage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -23,7 +26,7 @@ export default function TimetablePage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Timetable</h1>
           <p className="text-muted-foreground mt-1">
-            View your weekly schedule and classes
+            View your weekly schedule, classes and tasks
           </p>
         </div>
         
@@ -42,7 +45,18 @@ export default function TimetablePage() {
       </header>
 
       <div className="mt-6">
-        <TimetableGrid classes={classes} />
+        <Tabs defaultValue="class" className="w-full">
+          <TabsList className="mb-4">
+            <TabsTrigger value="class">Class Timetable</TabsTrigger>
+            <TabsTrigger value="task">Task Timetable</TabsTrigger>
+          </TabsList>
+          <TabsContent value="class">
+            <TimetableGrid classes={classes} />
+          </TabsContent>
+          <TabsContent value="task">
+            <TaskTimetable tasks={mockTasks} />
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* Add Class Dialog (placeholder) */}

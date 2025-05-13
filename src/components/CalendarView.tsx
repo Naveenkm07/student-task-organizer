@@ -41,7 +41,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tasks }) => {
     
     return (
       <div className="relative w-full h-full flex items-center justify-center">
-        {cellProps.children}
+        <div className="z-10">{cellProps.children}</div>
         
         {tasksForDay.length > 0 && (
           <div className="absolute bottom-1 left-0 right-0 flex justify-center gap-0.5">
