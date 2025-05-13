@@ -66,7 +66,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tasks }) => {
             onSelect={setDate}
             className="rounded-md border"
             components={{
-              day: ({ date, ...props }) => renderDay(date, props)
+              Day: ({ date, ...props }) => renderDay(date, props)
             }}
           />
         </CardContent>
