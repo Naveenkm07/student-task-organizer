@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   add,
@@ -26,7 +25,7 @@ import { toast } from "@/hooks/use-toast";
 import TaskForm from "@/components/TaskForm";
 import TaskItem from "@/components/TaskItem";
 import { TaskMiniCard } from "@/components/TaskMiniCard";
-import { getTaskIcon } from "@/lib/task-utils";
+import { getTaskIcon, getPriorityColor } from "@/lib/task-utils";
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 
@@ -255,20 +254,31 @@ export default function CalendarPage() {
                       </time>
                       <div className="w-full flex flex-col gap-1 mt-auto items-start">
                         {dayTasks.length > 0 && (
-                          <div className="flex gap-1 flex-wrap items-center">
-                            {hasUrgentTask && (
-                              <div className="w-2 h-2 rounded-full bg-priority-urgent"></div>
-                            )}
-                            {hasHighTask && (
-                              <div className="w-2 h-2 rounded-full bg-priority-high"></div>
-                            )}
+                          <div className="flex flex-col gap-1 w-full">
+                            {/* Priority indicators */}
+                            <div className="flex gap-1 flex-wrap items-center">
+                              {hasUrgentTask && (
+                                <div className="w-2 h-2 rounded-full bg-priority-urgent"></div>
+                              )}
+                              {hasHighTask && (
+                                <div className="w-2 h-2 rounded-full bg-priority-high"></div>
+                              )}
+                            </div>
                             
                             {/* Display task icons */}
-                            <div className="flex gap-1 overflow-hidden">
+                            <div className="flex flex-wrap gap-1 overflow-hidden">
                               {dayTasks.slice(0, 3).map((task) => {
                                 const Icon = getTaskIcon(task.title);
                                 return (
-                                  <Icon key={task.id} className="h-3.5 w-3.5 text-muted-foreground" data-task-id={task.id} />
+                                  <Icon 
+                                    key={task.id} 
+                                    className={cn(
+                                      "h-4 w-4", 
+                                      getPriorityColor(task.priority),
+                                      task.completed && "opacity-50"
+                                    )} 
+                                    data-task-id={task.id} 
+                                  />
                                 );
                               })}
                               {dayTasks.length > 3 && (

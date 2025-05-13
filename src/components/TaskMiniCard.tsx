@@ -3,7 +3,8 @@ import { format } from "date-fns";
 import { Task } from "@/lib/types";
 import { Badge } from "./ui/badge";
 import { Card, CardContent } from "./ui/card";
-import { getTaskIcon } from "@/lib/task-utils";
+import { getTaskIcon, getPriorityColor } from "@/lib/task-utils";
+import { cn } from "@/lib/utils";
 
 interface TaskMiniCardProps {
   task: Task;
@@ -28,13 +29,14 @@ export function TaskMiniCard({ task, className }: TaskMiniCardProps) {
 
   const isOverdue = new Date(task.deadline) < new Date() && !task.completed;
   const Icon = getTaskIcon(task.title);
+  const priorityColor = getPriorityColor(task.priority);
 
   return (
     <Card className={`shadow-soft w-64 ${className || ""}`}>
       <CardContent className="p-3">
         <div className="flex items-start gap-2">
           <div className="mt-1">
-            <Icon className="h-5 w-5 text-muted-foreground" />
+            <Icon className={cn("h-5 w-5", priorityColor, task.completed && "opacity-50")} />
           </div>
           <div className="flex-1 space-y-1">
             <div className="flex items-start justify-between">
