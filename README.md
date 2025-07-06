@@ -197,6 +197,14 @@ If you have any questions or need help, please:
 2. Create a new issue if your problem isn't already addressed
 3. Contact the maintainers
 
+## 📸 Screenshots
+
+![Screenshot 1](screenshots/screenshort1%20(1).jpg)
+![Screenshot 2](screenshots/screenshort1%20(2).jpg)
+![Screenshot 3](screenshots/screenshort1%20(3).jpg)
+![Screenshot 4](screenshots/screenshort1%20(4).jpg)
+![Screenshot 5](screenshots/screenshort1%20(5).jpg)
+
 ---
 
 **Made with ❤️ for students everywhere**
