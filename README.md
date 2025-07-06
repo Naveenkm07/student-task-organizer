@@ -1,73 +1,204 @@
-# Welcome to your Lovable project
+# 📚 Student Task & Deadline Organizer
 
-## Project info
+A modern, feature-rich web application designed to help students manage their academic tasks, deadlines, and schedules efficiently. Built with React, TypeScript, and a beautiful UI using shadcn/ui components.
 
-**URL**: https://lovable.dev/projects/0ce9524f-d3d9-49ae-a767-a41cc762625f
+![Student Task Organizer](https://img.shields.io/badge/React-18.3.1-blue?style=for-the-badge&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.5.3-blue?style=for-the-badge&logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-5.4.19-purple?style=for-the-badge&logo=vite)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.11-38B2AC?style=for-the-badge&logo=tailwind-css)
 
-## How can I edit this code?
+## ✨ Features
 
-There are several ways of editing your application.
+### 🎯 Core Functionality
+- **Task Management**: Create, edit, and organize academic tasks
+- **Deadline Tracking**: Never miss important due dates with smart reminders
+- **Calendar View**: Visual calendar interface for better planning
+- **Timetable Management**: Organize your daily schedule efficiently
+- **User Authentication**: Secure login and registration system
+- **Profile Management**: Personalize your experience
 
-**Use Lovable**
+### 🎨 User Interface
+- **Modern Design**: Clean and intuitive interface using shadcn/ui
+- **Dark/Light Theme**: Toggle between themes for comfortable viewing
+- **Responsive Design**: Works perfectly on desktop, tablet, and mobile
+- **Drag & Drop**: Intuitive task organization with drag-and-drop functionality
+- **Real-time Updates**: Instant feedback and updates
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/0ce9524f-d3d9-49ae-a767-a41cc762625f) and start prompting.
+### 📊 Dashboard Features
+- **Task Overview**: Quick summary of pending and completed tasks
+- **Progress Tracking**: Visual progress indicators for ongoing tasks
+- **Priority Management**: Organize tasks by priority levels
+- **Category Filtering**: Filter tasks by subject or category
+- **Search Functionality**: Quickly find specific tasks
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🚀 Quick Start
 
-**Use your preferred IDE**
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn package manager
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Installation
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Naveenkm07/student-task-organizer.git
+   cd student-task-organizer
+   ```
 
-Follow these steps:
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+3. **Start the development server**
+   ```bash
+   npm run dev
+   ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+4. **Open your browser**
+   Navigate to [http://localhost:8080](http://localhost:8080)
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 🛠️ Available Scripts
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run build:dev` | Build for development |
+| `npm run preview` | Preview production build |
+| `npm run lint` | Run ESLint |
+
+## 🏗️ Project Structure
+
+```
+student-task-organizer/
+├── src/
+│   ├── components/          # Reusable UI components
+│   │   ├── ui/             # shadcn/ui components
+│   │   ├── AppLayout.tsx   # Main layout component
+│   │   ├── Sidebar.tsx     # Navigation sidebar
+│   │   ├── TaskForm.tsx    # Task creation/editing form
+│   │   ├── TaskItem.tsx    # Individual task component
+│   │   └── ...
+│   ├── pages/              # Application pages
+│   │   ├── Auth/           # Authentication pages
+│   │   ├── Dashboard/      # Main dashboard
+│   │   ├── Calendar/       # Calendar view
+│   │   ├── Timetable/      # Timetable management
+│   │   └── Profile/        # User profile
+│   ├── hooks/              # Custom React hooks
+│   ├── lib/                # Utility functions
+│   ├── App.tsx             # Main application component
+│   └── main.tsx            # Application entry point
+├── public/                 # Static assets
+├── backend/                # Spring Boot backend (if applicable)
+└── package.json            # Project dependencies
 ```
 
-**Edit a file directly in GitHub**
+## 🎯 Key Features Explained
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### 📅 Calendar Integration
+- Monthly, weekly, and daily views
+- Task scheduling and deadline visualization
+- Color-coded task categories
+- Quick task creation from calendar
 
-**Use GitHub Codespaces**
+### ⏰ Timetable Management
+- Drag-and-drop schedule creation
+- Time slot management
+- Subject and activity organization
+- Export functionality
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### 🔐 Authentication System
+- Secure user registration and login
+- Password protection
+- Session management
+- User profile customization
 
-## What technologies are used for this project?
+### 📱 Responsive Design
+- Mobile-first approach
+- Touch-friendly interface
+- Adaptive layouts
+- Cross-device compatibility
 
-This project is built with:
+## 🛡️ Security Features
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Form Validation**: Client-side and server-side validation
+- **Input Sanitization**: Protection against XSS attacks
+- **Secure Authentication**: JWT-based authentication
+- **Data Encryption**: Sensitive data protection
 
-## How can I deploy this project?
+## 🎨 UI/UX Highlights
 
-Simply open [Lovable](https://lovable.dev/projects/0ce9524f-d3d9-49ae-a767-a41cc762625f) and click on Share -> Publish.
+- **Modern Design**: Clean, minimalist interface
+- **Accessibility**: WCAG compliant components
+- **Performance**: Optimized for fast loading
+- **User Experience**: Intuitive navigation and interactions
 
-## Can I connect a custom domain to my Lovable project?
+## 🔧 Technology Stack
 
-Yes, you can!
+### Frontend
+- **React 18.3.1** - Modern React with hooks
+- **TypeScript 5.5.3** - Type-safe development
+- **Vite 5.4.19** - Fast build tool and dev server
+- **Tailwind CSS 3.4.11** - Utility-first CSS framework
+- **shadcn/ui** - Beautiful, accessible components
+- **React Router 6.26.2** - Client-side routing
+- **React Hook Form 7.53.0** - Form management
+- **Zod 3.23.8** - Schema validation
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### UI Components
+- **Radix UI** - Headless UI primitives
+- **Lucide React** - Beautiful icons
+- **Sonner** - Toast notifications
+- **Recharts** - Data visualization
+- **Date-fns** - Date manipulation
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Development Tools
+- **ESLint** - Code linting
+- **TypeScript ESLint** - TypeScript-specific linting
+- **PostCSS** - CSS processing
+- **Autoprefixer** - CSS vendor prefixes
+
+## 📈 Performance
+
+- **Fast Loading**: Optimized bundle size
+- **Lazy Loading**: Code splitting for better performance
+- **Caching**: Efficient data caching strategies
+- **Optimized Images**: Compressed and optimized assets
+
+## 🤝 Contributing
+
+We welcome contributions! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+### Contributing Guidelines
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [shadcn/ui](https://ui.shadcn.com/) for the beautiful component library
+- [Vite](https://vitejs.dev/) for the fast build tool
+- [Tailwind CSS](https://tailwindcss.com/) for the utility-first CSS framework
+- [React](https://reactjs.org/) for the amazing frontend library
+
+## 📞 Support
+
+If you have any questions or need help, please:
+
+1. Check the [Issues](https://github.com/Naveenkm07/student-task-organizer/issues) page
+2. Create a new issue if your problem isn't already addressed
+3. Contact the maintainers
+
+---
+
+**Made with ❤️ for students everywhere**
+
+⭐ **Star this repository if you find it helpful!**
